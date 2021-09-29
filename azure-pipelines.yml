@@ -1,0 +1,42 @@
+# https://aka.ms/yaml
+
+trigger:
+- main
+- develop
+
+pr:
+- main
+- develop
+
+variables:
+  IsRunningOnCI: true
+  DotNetVersion: 6.0.100-rc.1.21463.6
+  DotNet.Cli.Telemetry.OptOut: true
+
+jobs:
+- job: windows
+  pool:
+    vmImage: windows-latest
+  variables:
+    LogDirectory: $(Build.ArtifactStagingDirectory)\logs
+  steps:
+    
+    - task: JavaToolInstaller@0
+      inputs:
+        versionSpec: '11'
+        jdkArchitectureOption: 'x64'
+        jdkSourceOption: 'PreInstalled'
+      displayName: Enable JDK 11
+    
+    - powershell: |
+        $ProgressPreference = 'SilentlyContinue'
+        Invoke-WebRequest -Uri "https://dot.net/v1/dotnet-install.ps1" -OutFile dotnet-install.ps1
+        & .\dotnet-install.ps1 -Version $(DotNetVersion) -InstallDir "$env:ProgramFiles\dotnet\" -Verbose
+        & dotnet --list-sdks
+      displayName: install .NET $(DotNetVersion)
+      errorActionPreference: stop
+
+    - powershell: |
+        & dotnet workload install maui
+      displayName: Install maui workload
+      errorActionPreference: stop
