@@ -3,6 +3,7 @@
 trigger:
 - main
 - develop
+- create-and-build-maui-app
 
 pr:
 - main
@@ -39,4 +40,16 @@ jobs:
     - powershell: |
         & dotnet workload install maui
       displayName: Install maui workload
+      errorActionPreference: stop
+
+    - powershell: |
+        & dotnet new maui -n HelloMauiPreview
+        & cd HelloMauiPreview
+        & dotnet restore
+      displayName: Create and restore HelloMaui App
+      errorActionPreference: stop
+
+    - powershell: |
+        & dotnet build -f net6.0-android
+      displayName: Build for Android
       errorActionPreference: stop
