@@ -44,12 +44,12 @@ jobs:
 
     - powershell: |
         & dotnet new maui -n HelloMauiPreview
-        & cd HelloMauiPreview
-        & dotnet restore
       displayName: Create and restore HelloMaui App
       errorActionPreference: stop
 
     - powershell: |
+        & cd HelloMauiPreview
+        & dotnet restore
         & dotnet build -f net6.0-android
       displayName: Build for Android
       errorActionPreference: stop
