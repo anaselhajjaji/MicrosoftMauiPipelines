@@ -53,3 +53,11 @@ jobs:
         & dotnet build -f net6.0-android
       displayName: Build for Android
       errorActionPreference: stop
+
+    - task: CopyFiles@2
+      displayName: copy artifacts
+      inputs:
+        contents: '*Android\**\*-Signed.apk'
+        targetFolder: $(Build.ArtifactStagingDirectory)
+        overWrite: true
+      condition: always()
