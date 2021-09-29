@@ -3,7 +3,6 @@
 trigger:
 - main
 - develop
-- create-and-build-maui-app
 
 pr:
 - main
