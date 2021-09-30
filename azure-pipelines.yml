@@ -49,8 +49,8 @@ jobs:
     - powershell: |
         & cd HelloMauiPreview
         & dotnet restore
-        & dotnet build -f net6.0-android
-      displayName: Build for Android
+        & dotnet build HelloMauiPreview.sln -c Release -bl:$(LogDirectory)\Release.binlog
+      displayName: Build
       errorActionPreference: stop
 
     - task: CopyFiles@2
